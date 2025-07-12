@@ -23,13 +23,14 @@ A modern Stack Overflow alternative built with **FastAPI**, **React 19**, and **
 ### 🤖 AI Assistance (Gemini)
 
 * Instant AI-generated answers
-* Smart suggestions to improve questions
 * Content enrichment & formatting help
+* Smart suggestions to improve questions
+
 
 ### 🔔 Notifications
 
-* Real-time updates: mentions, replies, comments
 * Notification center + optional email alerts
+* Real-time updates: mentions, replies, comments
 
 ### 🎨 UI/UX
 
