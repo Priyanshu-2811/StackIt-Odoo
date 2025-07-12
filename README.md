@@ -2,7 +2,6 @@
 
 A modern Stack Overflow alternative built with **FastAPI**, **React 19**, and **Gemini AI** for smarter collaboration.
 
-![StackIt Logo](https://via.placeholder.com/800x200/3B82F6/ffffff?text=StackIt+-+Q%26A+Platform)
 
 ---
 
