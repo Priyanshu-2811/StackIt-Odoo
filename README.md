@@ -1,4 +1,4 @@
-# StackIt API - Project Completion Summary
+# StackIt API - Project 
 
 ## ✅ Completed Features
 
