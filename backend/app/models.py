@@ -15,6 +15,8 @@ class User(Base):
     questions = relationship("Question", back_populates="owner")
     answers = relationship("Answer", back_populates="owner")
     comments = relationship("Comment", back_populates="owner")
+    notifications = relationship("Notification", back_populates="user")
+    votes = relationship("Vote", back_populates="user")
 
 class Question(Base):
     __tablename__ = "questions"
@@ -44,6 +46,7 @@ class Answer(Base):
     question = relationship("Question", back_populates="answers")
     owner = relationship("User", back_populates="answers")
     comments = relationship("Comment", back_populates="answer")
+    votes = relationship("Vote", back_populates="answer")
 
 class Comment(Base):
     __tablename__ = "comments"
@@ -56,3 +59,32 @@ class Comment(Base):
     # Relationships
     answer = relationship("Answer", back_populates="comments")
     owner = relationship("User", back_populates="comments")
+
+class Notification(Base):
+    __tablename__ = "notifications"
+    id = Column(Integer, primary_key=True, index=True)
+    message = Column(String(500))
+    type = Column(String(50))  # 'answer', 'comment', 'mention', 'vote'
+    is_read = Column(Boolean, default=False)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    related_question_id = Column(Integer, ForeignKey("questions.id"), nullable=True)
+    related_answer_id = Column(Integer, ForeignKey("answers.id"), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    user = relationship("User", back_populates="notifications")
+
+class Vote(Base):
+    __tablename__ = "votes"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    answer_id = Column(Integer, ForeignKey("answers.id"))
+    vote_type = Column(String(10))  # 'upvote' or 'downvote'
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    user = relationship("User", back_populates="votes")
+    answer = relationship("Answer", back_populates="votes")
+    
+    # Ensure one vote per user per answer
+    __table_args__ = {'sqlite_autoincrement': True}

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from .. import schemas, crud, models, database
 from ..auth_utils import get_current_user
+from .notifications import create_notification
 
 router = APIRouter(prefix="/answers", tags=["answers"])
 
@@ -22,7 +23,21 @@ def create_answer(
             detail="Question not found"
         )
     
-    return crud.create_answer(db=db, answer=answer, question_id=question_id, user_id=current_user.id)
+    # Create the answer
+    new_answer = crud.create_answer(db=db, answer=answer, question_id=question_id, user_id=current_user.id)
+    
+    # Create notification for question owner (if not answering own question)
+    if question.owner_id != current_user.id:
+        create_notification(
+            db=db,
+            user_id=question.owner_id,
+            message=f"{current_user.username} answered your question: {question.title}",
+            notification_type="answer",
+            related_question_id=question_id,
+            related_answer_id=new_answer.id
+        )
+    
+    return new_answer
 
 @router.get("/question/{question_id}", response_model=List[schemas.AnswerWithComments])
 def get_answers_for_question(
