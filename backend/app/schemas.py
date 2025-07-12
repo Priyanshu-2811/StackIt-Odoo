@@ -77,9 +77,34 @@ class CommentOut(BaseModel):
     content: str
     answer_id: int
     owner_id: int
+    created_at: datetime
     
     class Config:
         from_attributes = True
+
+# Notification schemas
+class NotificationResponse(BaseModel):
+    id: int
+    message: str
+    type: str
+    is_read: bool
+    related_question_id: Optional[int] = None
+    related_answer_id: Optional[int] = None
+    created_at: datetime
+
+    
+    class Config:
+        from_attributes = True
+
+
+# Vote schemas
+class VoteCreate(BaseModel):
+    answer_id: int
+    vote_type: str  # 'upvote' or 'downvote'
+
+class VoteResponse(BaseModel):
+    message: str
+    vote_type: Optional[str] = None
 
 # Update forward references
 QuestionWithAnswers.model_rebuild()

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from .. import schemas, crud, models, database
 from ..auth_utils import get_current_user
+from .notifications import create_notification
 
 router = APIRouter(prefix="/comments", tags=["comments"])
 
@@ -22,7 +23,25 @@ def create_comment(
             detail="Answer not found"
         )
     
+
+    # Create the comment
+    new_comment = crud.create_comment(db=db, comment=comment, answer_id=answer_id, user_id=current_user.id)
+    
+    # Create notification for answer owner (if not commenting on own answer)
+    if answer.owner_id != current_user.id:
+        create_notification(
+            db=db,
+            user_id=answer.owner_id,
+            message=f"{current_user.username} commented on your answer",
+            notification_type="comment",
+            related_answer_id=answer_id,
+            related_question_id=answer.question_id
+        )
+    
+    return new_comment
+
     return crud.create_comment(db=db, comment=comment, answer_id=answer_id, user_id=current_user.id)
+
 
 @router.get("/answer/{answer_id}", response_model=List[schemas.CommentOut])
 def get_comments_for_answer(
