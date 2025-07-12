@@ -23,6 +23,7 @@ def create_comment(
             detail="Answer not found"
         )
     
+
     # Create the comment
     new_comment = crud.create_comment(db=db, comment=comment, answer_id=answer_id, user_id=current_user.id)
     
@@ -38,6 +39,9 @@ def create_comment(
         )
     
     return new_comment
+
+    return crud.create_comment(db=db, comment=comment, answer_id=answer_id, user_id=current_user.id)
+
 
 @router.get("/answer/{answer_id}", response_model=List[schemas.CommentOut])
 def get_comments_for_answer(

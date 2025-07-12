@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import Base, engine
 from .routes import auth, questions, answers, comments, notifications, votes, ai
+from .routes import auth, questions, answers, comments
+
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -33,3 +35,8 @@ app.include_router(ai.router)
 @app.get("/")
 def root():
     return {"msg": "StackIt API Running!"}
+
+@app.get("/")
+def root():
+    return {"msg": "StackIt API Running! 🚀", "docs": "/docs", "redoc": "/redoc"}
+

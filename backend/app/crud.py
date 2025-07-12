@@ -31,6 +31,7 @@ def create_question(db: Session, question: schemas.QuestionCreate, user_id: int)
     db.add(db_question)
     db.commit()
     db.refresh(db_question)
+
     
     # Get the question owner
     question_owner = get_user_by_id(db, user_id)
@@ -47,6 +48,7 @@ def create_question(db: Session, question: schemas.QuestionCreate, user_id: int)
             related_question_id=db_question.id
         )
     
+
     return db_question
 
 def get_questions(db: Session, skip: int = 0, limit: int = 100):
@@ -147,6 +149,7 @@ def delete_comment(db: Session, comment_id: int):
         db.delete(db_comment)
         db.commit()
     return db_comment
+
 
 # Notification CRUD
 def create_notification(db: Session, user_id: int, message: str, notification_type: str, 
@@ -263,3 +266,4 @@ def get_current_user(db: Session, token: str):
         return user
     except Exception:
         return None
+

@@ -91,9 +91,11 @@ class NotificationResponse(BaseModel):
     related_question_id: Optional[int] = None
     related_answer_id: Optional[int] = None
     created_at: datetime
+
     
     class Config:
         from_attributes = True
+
 
 # Vote schemas
 class VoteCreate(BaseModel):

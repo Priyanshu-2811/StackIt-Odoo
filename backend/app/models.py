@@ -15,8 +15,10 @@ class User(Base):
     questions = relationship("Question", back_populates="owner")
     answers = relationship("Answer", back_populates="owner")
     comments = relationship("Comment", back_populates="owner")
+
     notifications = relationship("Notification", back_populates="user")
     votes = relationship("Vote", back_populates="user")
+
 
 class Question(Base):
     __tablename__ = "questions"
@@ -46,7 +48,9 @@ class Answer(Base):
     question = relationship("Question", back_populates="answers")
     owner = relationship("User", back_populates="answers")
     comments = relationship("Comment", back_populates="answer")
+
     votes = relationship("Vote", back_populates="answer")
+
 
 class Comment(Base):
     __tablename__ = "comments"
@@ -58,6 +62,7 @@ class Comment(Base):
     
     # Relationships
     answer = relationship("Answer", back_populates="comments")
+
     owner = relationship("User", back_populates="comments")
 
 class Notification(Base):
@@ -88,3 +93,6 @@ class Vote(Base):
     
     # Ensure one vote per user per answer
     __table_args__ = {'sqlite_autoincrement': True}
+
+    owner = relationship("User", back_populates="comments")
+

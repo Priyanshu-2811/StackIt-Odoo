@@ -3,7 +3,9 @@ from sqlalchemy.orm import Session
 from typing import List
 from .. import schemas, crud, models, database
 from ..auth_utils import get_current_user
+
 from .notifications import create_notification
+
 
 router = APIRouter(prefix="/answers", tags=["answers"])
 
@@ -23,6 +25,7 @@ def create_answer(
             detail="Question not found"
         )
     
+
     # Create the answer
     new_answer = crud.create_answer(db=db, answer=answer, question_id=question_id, user_id=current_user.id)
     
@@ -38,6 +41,9 @@ def create_answer(
         )
     
     return new_answer
+
+    return crud.create_answer(db=db, answer=answer, question_id=question_id, user_id=current_user.id)
+
 
 @router.get("/question/{question_id}", response_model=List[schemas.AnswerWithComments])
 def get_answers_for_question(
